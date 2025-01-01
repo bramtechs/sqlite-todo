@@ -53,6 +53,9 @@ private:
 int main(int argc, char** argv)
 {
     auto program = sqlite_todo::CliTodoProgram();
+
+    sqlite_todo::TodoStore::getInstance().addItem("test item");
+
     while (program.shouldRun()) {
         program.takeInput();
     }

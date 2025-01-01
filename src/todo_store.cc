@@ -1,28 +1,17 @@
 #include "todo_store.hh"
 #include "store_error.hh"
+#include "todo_iterator.hh"
 
-#include <iostream> // for printing to stdout
 #include <iomanip> // for std::quoted
+#include <iostream> // for printing to stdout
 
-namespace sqlite_todo
-{
+namespace sqlite_todo {
 
 constexpr static const char* DB_NAME = "todos.db";
 
 TodoStore::TodoStore()
     : mDb(DB_NAME)
 {
-}
-
-void TodoStore::ensureTodoTable()
-{
-    if (mDb.execute("CREATE TABLE todos (id int PRIMARY KEY, task text);")) { // truthy means an error happened
-        mDb.perror(); // print error message
-        std::cerr.flush();
-    } else {
-        mDb.commit();
-        std::cout << "Created todo table inside " << DB_NAME << '\n';
-    }
 }
 
 TodoStore& TodoStore::getInstance()
@@ -47,20 +36,45 @@ void TodoStore::addItem(const std::string& task)
         throw StoreError("Failed to add item to db table!");
     }
 
-        mDb.commit();
-        std::cout << "Added todo item " << std::quoted(task) << '\n';
+    mDb.commit();
+    std::cout << "Added todo item " << std::quoted(task) << '\n';
+}
+
+TodoIterator TodoStore::getItems()
+{
+    ensureTodoTable();
+
+    // truthy means an error happened
+    if (mDb.execute("SELECT id, task FROM todos")) {
+        mDb.perror();
+        std::cerr.flush();
+        throw StoreError("Failed to collect items from db table!");
     }
+
+    std::vector<Todo> items = {};
+    const auto& rows = mDb.copy_result();
+    for (const auto& row : *rows)
+    {
+        try {
+            const int id = std::stod(row.at(0));
+            items.emplace_back(id, row.at(1));
+        } catch (std::exception& ex) {
+            std::cerr << "Skipped broken entry: " << row.at(0) << ", " << row.at(1) << " -> " << ex.what();
+        }
+    }
+    return TodoIterator(std::move(items));
+}
+
 void TodoStore::ensureTodoTable()
 {
     // truthy means an error happened
     if (mDb.execute("CREATE TABLE todos (id INTEGER PRIMARY KEY, task text);")) {
         mDb.perror(); // print error message
         std::cerr.flush();
-        throw StoreError("Failed to create todos table!");
+    } else {
+        mDb.commit();
+        std::cout << "Created todo table inside " << DB_NAME << '\n';
     }
-
-    mDb.commit();
-    std::cout << "Created todo table inside " << DB_NAME << '\n';
 }
 
 std::unique_ptr<TodoStore> TodoStore::sStore {};

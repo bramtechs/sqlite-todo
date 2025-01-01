@@ -25,7 +25,7 @@ public:
 
     [[nodiscard]] Todo& next() override {
         assert(hasNext() && "No items left!");
-        return mItems[mIndex];
+        return mItems[mIndex++];
     }
 
 private:
