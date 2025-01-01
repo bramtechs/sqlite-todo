@@ -1,5 +1,6 @@
 #pragma once
 #include "iterator.hh"
+#include "todo.hh"
 
 #include <string>
 #include <vector>
@@ -8,27 +9,27 @@ namespace sqlite_todo
 {
 
 /**
- * Iterator for a collection of TodoItems (strings)
+ * Iterator for a collection of Todo.
  * In a real codebase, one should just use C++ std::vector's built-in iterators.
  */
-class TodoIterator : public IIterator<std::string>
+class TodoIterator : public IIterator<Todo>
 {
 public:
-    TodoIterator(std::vector<std::string>&& items)
+    TodoIterator(std::vector<Todo>&& items)
         : mItems(items){
     }
 
-    bool hasNext() const override {
+    [[nodiscard]] bool hasNext() const override {
         return mIndex < mItems.size();
     }
 
-    [[nodiscard]] std::string& next() override {
+    [[nodiscard]] Todo& next() override {
         assert(hasNext() && "No items left!");
         return mItems[mIndex];
     }
 
 private:
-    std::vector<std::string> mItems;
+    std::vector<Todo> mItems;
     std::size_t mIndex {};
 };
 

@@ -3,6 +3,7 @@
 
 #include <SQLITE3.hpp>
 #include <memory>
+#include <stdexcept>
 #include <vector>
 #include <string>
 #include <cassert>
@@ -10,7 +11,8 @@
 namespace sqlite_todo
 {
 
-class TodoItems;
+// forward declaration
+class TodoIterator;
 
 /**
  * Singleton class that manages TODO items.
@@ -20,8 +22,8 @@ class TodoStore
 public:
     void addItem(const std::string& task);
 
-    [[nodiscard]] TodoItems getItems();
-    
+    [[nodiscard]] TodoIterator getItems();
+
     [[nodiscard]] static TodoStore& getInstance();
 
 private:
