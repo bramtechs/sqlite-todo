@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(singleton_todo)
+project(sqlite_todo)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
@@ -28,6 +28,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 ## MISC - Integrated Development Environment
 
 if (WIN32)
-  # change default working directory in Visual Studio
+  # change default working directory in Visual Studio to repository root.
   set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 endif()
