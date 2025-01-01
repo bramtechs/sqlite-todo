@@ -33,4 +33,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 if (WIN32)
   # change default working directory in Visual Studio to repository root.
   set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+  # change default starting project in Visual Studio
+  set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT sqlite_todo)
 endif()
