@@ -8,11 +8,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 add_executable(${PROJECT_NAME}
   src/program.cc
-  src/commands.hh
+  src/todo.hh
   src/todo_store.cc
   src/todo_store.hh
   src/iterator.hh
   src/todo_iterator.hh
+  src/command.hh
+  src/list_command.cc
+  src/list_command.hh
 )
 
 ## SQLITE library
