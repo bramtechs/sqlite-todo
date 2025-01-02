@@ -16,6 +16,7 @@ add_executable(${PROJECT_NAME}
   src/command.hh
   src/list_command.cc
   src/list_command.hh
+  src/help_command.cc
 )
 
 ## SQLITE library

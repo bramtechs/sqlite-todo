@@ -2,6 +2,7 @@
 
 #include "command.hh"
 #include "list_command.hh"
+#include "help_command.hh"
 
 #include <iomanip>
 #include <iostream>
@@ -42,6 +43,7 @@ private:
     void registerCommands()
     {
         mCommands.emplace("list", std::make_unique<ListCommand>());
+        mCommands.emplace("help", std::make_unique<HelpCommand>());
     }
 
     bool mShouldRun { true };
