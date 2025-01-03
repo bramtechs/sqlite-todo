@@ -1,17 +1,21 @@
 #pragma once
 #include "todo_store.hh"
 
+#include <stdexcept>
 #include <string>
 
-namespace sqlite_todo
-{
+namespace sqlite_todo {
 
-class ICommand
-{
+class CommandError : public std::runtime_error {
+public:
+    using std::runtime_error::runtime_error;
+};
+
+class ICommand {
 public:
     virtual ~ICommand() = default;
 
-    virtual void run() = 0;
+    virtual void run(const std::string& param) = 0;
 };
 
 }

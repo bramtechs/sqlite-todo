@@ -1,12 +1,11 @@
 #include "list_command.hh"
 #include "todo.hh"
-#include "todo_store.hh"
 #include "todo_iterator.hh"
+#include "todo_store.hh"
 
-namespace sqlite_todo
-{
+namespace sqlite_todo {
 
-void ListCommand::run()
+void ListCommand::run(const std::string&)
 {
     TodoStore& store = TodoStore::getInstance();
 

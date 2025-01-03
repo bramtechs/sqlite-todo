@@ -1,12 +1,14 @@
 #include "todo_store.hh"
 
+#include "add_command.hh"
 #include "command.hh"
-#include "list_command.hh"
 #include "help_command.hh"
+#include "list_command.hh"
 
 #include <iomanip>
 #include <iostream>
 #include <memory>
+#include <ranges>
 #include <stdexcept>
 #include <unordered_map>
 
@@ -24,13 +26,34 @@ public:
         std::cout << "Enter a command. Type 'help' to list all commands.\n";
 
         std::string input;
-        std::cin >> input;
+        std::getline(std::cin, input);
+
+        std::string name;
+        std::string param;
 
         try {
-            auto& command = mCommands.at(input);
-            command->run();
-        } catch (std::out_of_range&) {
+            const auto words = splitInputByChar(input, ' ');
+            if (words.empty()) {
+                throw CommandError("No command given!");
+            }
+
+            if (words.size() > 1) {
+                name = words[0];
+                param = input.substr(name.size() + 1);
+            } else {
+                name = words[0];
+                param = "";
+            }
+
+            auto& command = mCommands.at(name);
+            command->run(param);
+
+        } catch (const CommandError& error) {
+            std::cerr << error.what() << '\n';
+        } catch (const std::out_of_range&) {
             std::cerr << std::quoted(input) << " command does not exist.\n";
+        } catch (const std::exception& ex) {
+            std::cerr << "Unexpected error:" << ex.what() << '\n';
         }
     }
 
@@ -40,9 +63,20 @@ public:
     }
 
 private:
+    std::vector<std::string> splitInputByChar(std::string input, char ch) const
+    {
+        auto range = std::views::split(input, ch);
+        std::vector<std::string> result;
+        for (auto&& subrange : range) {
+            result.emplace_back(subrange.begin(), subrange.end());
+        }
+        return result;
+    }
+
     void registerCommands()
     {
         mCommands.emplace("list", std::make_unique<ListCommand>());
+        mCommands.emplace("add", std::make_unique<AddCommand>());
         mCommands.emplace("help", std::make_unique<HelpCommand>());
     }
 

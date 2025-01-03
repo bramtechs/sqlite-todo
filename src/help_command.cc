@@ -2,10 +2,9 @@
 
 #include <iostream>
 
-namespace sqlite_todo
-{
+namespace sqlite_todo {
 
-void HelpCommand::run()
+void HelpCommand::run(const std::string& param)
 {
     std::cout << "add <task title> - Adds a todo task." << '\n';
     std::cout << "complete <id> - Marks a task as completed by removing it:" << '\n';

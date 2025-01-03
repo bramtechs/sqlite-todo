@@ -1,13 +1,11 @@
 #pragma once
 #include "command.hh"
 
-namespace sqlite_todo
-{
+namespace sqlite_todo {
 
-class ListCommand final : public ICommand
-{
+class ListCommand final : public ICommand {
 public:
-    void run() override;
+    void run(const std::string&) override;
 };
 
 }
