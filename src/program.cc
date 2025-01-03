@@ -5,6 +5,7 @@
 #include "done_command.hh"
 #include "help_command.hh"
 #include "list_command.hh"
+#include "reset_command.hh"
 
 #include <cstdlib>
 #include <iomanip>
@@ -34,7 +35,7 @@ public:
 
     bool takeInput()
     {
-        std::cout << "Enter a command. Type 'help' to list all commands.\n";
+        std::cout << "\nEnter a command. Type 'help' to list all commands.\n";
 
         std::string input;
         std::getline(std::cin, input);
@@ -67,7 +68,7 @@ public:
         } catch (const std::out_of_range&) {
             std::cerr << std::quoted(input) << " command does not exist.\n";
         } catch (const std::exception& ex) {
-            std::cerr << "Unexpected error:" << ex.what() << '\n';
+            std::cerr << "Unexpected error: " << ex.what() << '\n';
         }
 
         return true;
@@ -105,6 +106,7 @@ private:
         mCommands.emplace("list", std::make_unique<ListCommand>());
         mCommands.emplace("add", std::make_unique<AddCommand>());
         mCommands.emplace("done", std::make_unique<DoneCommand>());
+        mCommands.emplace("reset", std::make_unique<ResetCommand>());
         mCommands.emplace("help", std::make_unique<HelpCommand>());
         mCommands.emplace("quit", std::make_unique<QuitCommand>());
     }

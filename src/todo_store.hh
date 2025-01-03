@@ -22,6 +22,8 @@ public:
 
     void deleteItem(size_t id);
 
+    void resetItems();
+
     [[nodiscard]] TodoIterator getItems();
 
     [[nodiscard]] static TodoStore& getInstance();

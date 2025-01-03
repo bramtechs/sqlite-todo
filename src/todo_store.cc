@@ -51,6 +51,20 @@ void TodoStore::deleteItem(size_t id)
         std::cerr.flush();
         throw StoreError("Failed to delete item from db table");
     }
+
+    mDb.commit();
+}
+
+void TodoStore::resetItems()
+{
+    SQLITE3_QUERY query = SQLITE3_QUERY("DROP TABLE todos;");
+    if (mDb.execute(query)) {
+        mDb.perror();
+        std::cerr.flush();
+        throw StoreError("Failed to drop db table");
+    }
+
+    mDb.commit();
 }
 
 TodoIterator TodoStore::getItems()
@@ -81,8 +95,8 @@ void TodoStore::ensureTodoTable()
 {
     // truthy means an error happened
     if (mDb.execute("CREATE TABLE todos (id INTEGER PRIMARY KEY, task text);")) {
-        mDb.perror(); // print error message
-        std::cerr.flush();
+        //mDb.perror(); // print error message
+        //std::cerr.flush();
     } else {
         mDb.commit();
         std::cout << "Created todo table inside " << DB_NAME << '\n';
