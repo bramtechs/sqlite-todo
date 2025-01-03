@@ -5,7 +5,7 @@ namespace sqlite_todo {
 
 class ListCommand final : public ICommand {
 public:
-    void run(const std::string&) override;
+    bool run(const std::string&) override;
 };
 
 }

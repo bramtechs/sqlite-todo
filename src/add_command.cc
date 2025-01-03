@@ -6,7 +6,7 @@
 namespace sqlite_todo
 {
 
-void AddCommand::run(const std::string& parameter)
+bool AddCommand::run(const std::string& parameter)
 {
     if (parameter.empty()) {
         throw CommandError("Todo item cannot be empty");
@@ -14,6 +14,8 @@ void AddCommand::run(const std::string& parameter)
 
     TodoStore& store = TodoStore::getInstance();
     store.addItem(parameter);
+
+    return true;
 }
 
 }

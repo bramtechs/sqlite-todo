@@ -14,6 +14,15 @@
 
 namespace sqlite_todo {
 
+class QuitCommand : public ICommand {
+public:
+    bool run(const std::string& param) override
+    {
+        std::cout << "Bye!\n";
+        return false;
+    }
+};
+
 class CliTodoProgram {
 public:
     CliTodoProgram()
@@ -21,7 +30,7 @@ public:
         registerCommands();
     }
 
-    void takeInput()
+    bool takeInput()
     {
         std::cout << "Enter a command. Type 'help' to list all commands.\n";
 
@@ -46,7 +55,9 @@ public:
             }
 
             auto& command = mCommands.at(name);
-            command->run(param);
+            if (!command->run(param)) {
+                return false;
+            }
 
         } catch (const CommandError& error) {
             std::cerr << error.what() << '\n';
@@ -55,6 +66,8 @@ public:
         } catch (const std::exception& ex) {
             std::cerr << "Unexpected error:" << ex.what() << '\n';
         }
+
+        return true;
     }
 
     bool shouldRun() const noexcept
@@ -78,6 +91,7 @@ private:
         mCommands.emplace("list", std::make_unique<ListCommand>());
         mCommands.emplace("add", std::make_unique<AddCommand>());
         mCommands.emplace("help", std::make_unique<HelpCommand>());
+        mCommands.emplace("quit", std::make_unique<QuitCommand>());
     }
 
     bool mShouldRun { true };
@@ -93,7 +107,9 @@ int main(int argc, char** argv)
     sqlite_todo::TodoStore::getInstance().addItem("test item");
 
     while (program.shouldRun()) {
-        program.takeInput();
+        if (!program.takeInput()) {
+            break;
+        }
     }
-    return 0;
+    return EXIT_SUCCESS;
 }

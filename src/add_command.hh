@@ -7,7 +7,7 @@ namespace sqlite_todo
 class AddCommand : public ICommand
 {
 public:
-    void run(const std::string& parameter) override;
+    bool run(const std::string& parameter) override;
 };
 
 }

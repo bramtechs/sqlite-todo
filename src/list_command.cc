@@ -5,7 +5,7 @@
 
 namespace sqlite_todo {
 
-void ListCommand::run(const std::string&)
+bool ListCommand::run(const std::string&)
 {
     TodoStore& store = TodoStore::getInstance();
 
@@ -13,6 +13,8 @@ void ListCommand::run(const std::string&)
     while (items.hasNext()) {
         std::cout << items.next() << "\n";
     }
+
+    return true;
 }
 
 }

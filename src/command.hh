@@ -15,7 +15,13 @@ class ICommand {
 public:
     virtual ~ICommand() = default;
 
-    virtual void run(const std::string& param) = 0;
+    /**
+     * Run the inherited command.
+     *
+     * \param param The text specified after the command.
+     * \return True if the program should continue, false otherwise.
+     */
+    virtual bool run(const std::string& param) = 0;
 };
 
 }
