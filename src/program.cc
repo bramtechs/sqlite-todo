@@ -5,6 +5,7 @@
 #include "help_command.hh"
 #include "list_command.hh"
 
+#include <cstdlib>
 #include <iomanip>
 #include <iostream>
 #include <memory>
@@ -55,6 +56,7 @@ public:
             }
 
             auto& command = mCommands.at(name);
+            clearConsole();
             if (!command->run(param)) {
                 return false;
             }
@@ -84,6 +86,17 @@ private:
             result.emplace_back(subrange.begin(), subrange.end());
         }
         return result;
+    }
+
+    void clearConsole()
+    {
+#if defined _WIN32
+        system("cls");
+#elif defined(__LINUX__) || defined(__gnu_linux__) || defined(__linux__) || defined(__APPLE__)
+        system("clear");
+#else
+        // We don't know how to clear on your platform...
+#endif
     }
 
     void registerCommands()
