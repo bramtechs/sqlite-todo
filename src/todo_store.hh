@@ -1,15 +1,14 @@
 #pragma once
 #include "iterator.hh"
 
-#include <SQLITE3.hpp>
-#include <memory>
-#include <stdexcept>
-#include <vector>
-#include <string>
 #include <cassert>
+#include <memory>
+#include <SQLITE3.hpp>
+#include <stdexcept>
+#include <string>
+#include <vector>
 
-namespace sqlite_todo
-{
+namespace sqlite_todo {
 
 // forward declaration
 class TodoIterator;
@@ -17,10 +16,11 @@ class TodoIterator;
 /**
  * Singleton class that manages TODO items.
  */
-class TodoStore
-{
+class TodoStore {
 public:
     void addItem(const std::string& task);
+
+    void deleteItem(size_t id);
 
     [[nodiscard]] TodoIterator getItems();
 

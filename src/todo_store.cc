@@ -40,6 +40,19 @@ void TodoStore::addItem(const std::string& task)
     std::cout << "Added todo item " << std::quoted(task) << '\n';
 }
 
+void TodoStore::deleteItem(size_t id)
+{
+    ensureTodoTable();
+
+    SQLITE3_QUERY query = SQLITE3_QUERY("DELETE FROM todos WHERE id = (?);");
+    query.add_binding(std::to_string(id));
+    if (mDb.execute(query)) {
+        mDb.perror();
+        std::cerr.flush();
+        throw StoreError("Failed to delete item from db table");
+    }
+}
+
 TodoIterator TodoStore::getItems()
 {
     ensureTodoTable();
@@ -53,8 +66,7 @@ TodoIterator TodoStore::getItems()
 
     std::vector<Todo> items = {};
     const auto& rows = mDb.copy_result();
-    for (const auto& row : *rows)
-    {
+    for (const auto& row : *rows) {
         try {
             const int id = std::stod(row.at(0));
             items.emplace_back(id, row.at(1));

@@ -2,6 +2,7 @@
 
 #include "add_command.hh"
 #include "command.hh"
+#include "done_command.hh"
 #include "help_command.hh"
 #include "list_command.hh"
 
@@ -103,6 +104,7 @@ private:
     {
         mCommands.emplace("list", std::make_unique<ListCommand>());
         mCommands.emplace("add", std::make_unique<AddCommand>());
+        mCommands.emplace("done", std::make_unique<DoneCommand>());
         mCommands.emplace("help", std::make_unique<HelpCommand>());
         mCommands.emplace("quit", std::make_unique<QuitCommand>());
     }
